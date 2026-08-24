@@ -38,7 +38,6 @@
   function apiUrl(params) {
     const url = new URL(CFG.APPS_SCRIPT_URL);
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-    if (CFG.RESULTS_ACCESS_TOKEN) url.searchParams.set("token", CFG.RESULTS_ACCESS_TOKEN);
     return url.toString();
   }
 
@@ -59,7 +58,7 @@
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ type: "purge", token: CFG.RESULTS_ACCESS_TOKEN })
+        body: JSON.stringify({ type: "purge" })
       });
       // no-cors means we can't read the response; assume success and re-verify by reloading.
       setTimeout(loadResults, 800);
@@ -102,10 +101,6 @@
     try {
       const r = await fetch(apiUrl({ action: "results" }), { method: "GET" });
       const data = await r.json();
-      if (data.error) {
-        resultsStatus.textContent = "Access denied by backend — check RESULTS_ACCESS_TOKEN.";
-        return;
-      }
       const submissions = data.submissions || [];
       resultsStatus.textContent = `${submissions.length} submission(s).`;
 
