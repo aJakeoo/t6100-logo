@@ -10,7 +10,6 @@
   const categoryRanking = {}; // slug -> 1..3
 
   const surveyRoot = document.getElementById("survey-sections");
-  const rankingRoot = document.getElementById("category-ranking-rows");
   const budgetBar = document.getElementById("budget-bar");
   const statusMsg = document.getElementById("submit-status");
   const submitBtn = document.getElementById("submit-btn");
@@ -32,6 +31,22 @@
     const wrap = document.createElement("section");
     wrap.className = "rating-section";
     wrap.innerHTML = `<h2>${section.title}</h2><p class="hint">Slide each design from 1 (not for us) to 5 (love it). Default is 1.</p>`;
+
+    const body = document.createElement("div");
+    body.className = "rating-section-body";
+
+    const rankCol = document.createElement("div");
+    rankCol.className = "category-rank-col";
+    rankCol.dataset.slug = slug;
+    rankCol.innerHTML = `
+      <div class="rank-title">${section.title} rank</div>
+      <div class="rank-hint">1 = favorite direction, 3 = least favorite</div>
+      <div class="rank-slider-wrap">
+        <input type="range" min="1" max="3" step="1" value="${categoryRanking[slug]}" data-slug="${slug}" class="rank-slider">
+        <span class="value rank-value">${categoryRanking[slug]}</span>
+      </div>`;
+    body.appendChild(rankCol);
+
     const grid = document.createElement("div");
     grid.className = "grid";
 
@@ -54,27 +69,13 @@
       grid.appendChild(card);
     });
 
-    wrap.appendChild(grid);
+    body.appendChild(grid);
+    wrap.appendChild(body);
     surveyRoot.appendChild(wrap);
   }
 
-  function renderCategoryRanking(slugs, m) {
-    slugs.forEach((slug, i) => {
-      if (!m[slug]) return;
-      categoryRanking[slug] = i + 1; // default distinct ranks 1,2,3
-    });
-
-    rankingRoot.innerHTML = slugs
-      .filter((slug) => m[slug])
-      .map((slug) => `
-        <div class="slider-row" style="margin-bottom:10px;" data-slug="${slug}">
-          <span style="min-width:140px;font-weight:600;">${m[slug].title}</span>
-          <input type="range" min="1" max="3" step="1" value="${categoryRanking[slug]}" data-slug="${slug}" class="rank-slider">
-          <span class="value rank-value">${categoryRanking[slug]}</span>
-        </div>`)
-      .join("");
-
-    rankingRoot.querySelectorAll(".rank-slider").forEach((input) => {
+  function attachRankHandlers() {
+    surveyRoot.querySelectorAll(".rank-slider").forEach((input) => {
       input.addEventListener("input", () => onRankInput(input));
     });
   }
@@ -90,18 +91,18 @@
     );
     if (conflictSlug) {
       categoryRanking[conflictSlug] = oldVal;
-      const conflictInput = rankingRoot.querySelector(`.rank-slider[data-slug="${conflictSlug}"]`);
-      const conflictValueEl = conflictInput.closest(".slider-row").querySelector(".rank-value");
+      const conflictInput = surveyRoot.querySelector(`.rank-slider[data-slug="${conflictSlug}"]`);
+      const conflictValueEl = conflictInput.closest(".rank-slider-wrap").querySelector(".rank-value");
       conflictInput.value = String(oldVal);
       conflictValueEl.textContent = String(oldVal);
     }
 
     categoryRanking[slug] = newVal;
-    input.closest(".slider-row").querySelector(".rank-value").textContent = String(newVal);
+    input.closest(".rank-slider-wrap").querySelector(".rank-value").textContent = String(newVal);
   }
 
   function attachSliderHandlers() {
-    surveyRoot.querySelectorAll('input[type="range"]').forEach((input) => {
+    surveyRoot.querySelectorAll('input[type="range"][data-id]').forEach((input) => {
       input.addEventListener("input", () => onSliderInput(input));
     });
   }
@@ -203,11 +204,14 @@
       .then((data) => {
         manifest = data;
         const slugs = ["craft-label", "heraldic", "embroidery"];
-        renderCategoryRanking(slugs, manifest);
+        slugs.forEach((slug, i) => {
+          if (manifest[slug]) categoryRanking[slug] = i + 1; // default distinct ranks 1,2,3
+        });
         slugs.forEach((slug) => {
           if (manifest[slug]) renderSection(slug, manifest[slug]);
         });
         attachSliderHandlers();
+        attachRankHandlers();
         updateBudgetBar();
       });
 
