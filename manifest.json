@@ -1,0 +1,142 @@
+{
+  "craft-label": {
+    "title": "Craft Label",
+    "items": [
+      {
+        "id": "craft-label-01",
+        "file": "assets/images/craft-label/craft-label-01.png",
+        "label": "Design 1"
+      },
+      {
+        "id": "craft-label-02",
+        "file": "assets/images/craft-label/craft-label-02.png",
+        "label": "Design 2"
+      },
+      {
+        "id": "craft-label-03",
+        "file": "assets/images/craft-label/craft-label-03.png",
+        "label": "Design 3"
+      },
+      {
+        "id": "craft-label-04",
+        "file": "assets/images/craft-label/craft-label-04.png",
+        "label": "Design 4"
+      },
+      {
+        "id": "craft-label-05",
+        "file": "assets/images/craft-label/craft-label-05.png",
+        "label": "Design 5"
+      },
+      {
+        "id": "craft-label-06",
+        "file": "assets/images/craft-label/craft-label-06.png",
+        "label": "Design 6"
+      },
+      {
+        "id": "craft-label-07",
+        "file": "assets/images/craft-label/craft-label-07.png",
+        "label": "Design 7"
+      },
+      {
+        "id": "craft-label-08",
+        "file": "assets/images/craft-label/craft-label-08.png",
+        "label": "Design 8"
+      },
+      {
+        "id": "craft-label-09",
+        "file": "assets/images/craft-label/craft-label-09.png",
+        "label": "Design 9"
+      },
+      {
+        "id": "craft-label-10",
+        "file": "assets/images/craft-label/craft-label-10.png",
+        "label": "Design 10"
+      },
+      {
+        "id": "craft-label-11",
+        "file": "assets/images/craft-label/craft-label-11.png",
+        "label": "Design 11"
+      },
+      {
+        "id": "craft-label-12",
+        "file": "assets/images/craft-label/craft-label-12.png",
+        "label": "Design 12"
+      },
+      {
+        "id": "craft-label-13",
+        "file": "assets/images/craft-label/craft-label-13.png",
+        "label": "Design 13"
+      },
+      {
+        "id": "craft-label-14",
+        "file": "assets/images/craft-label/craft-label-14.png",
+        "label": "Design 14"
+      }
+    ]
+  },
+  "heraldic": {
+    "title": "Heraldic Crest",
+    "items": [
+      {
+        "id": "heraldic-01",
+        "file": "assets/images/heraldic/heraldic-01.png",
+        "label": "Design 1"
+      },
+      {
+        "id": "heraldic-02",
+        "file": "assets/images/heraldic/heraldic-02.png",
+        "label": "Design 2"
+      },
+      {
+        "id": "heraldic-03",
+        "file": "assets/images/heraldic/heraldic-03.png",
+        "label": "Design 3"
+      },
+      {
+        "id": "heraldic-04",
+        "file": "assets/images/heraldic/heraldic-04.png",
+        "label": "Design 4"
+      },
+      {
+        "id": "heraldic-05",
+        "file": "assets/images/heraldic/heraldic-05.png",
+        "label": "Design 5"
+      },
+      {
+        "id": "heraldic-06",
+        "file": "assets/images/heraldic/heraldic-06.png",
+        "label": "Design 6"
+      },
+      {
+        "id": "heraldic-07",
+        "file": "assets/images/heraldic/heraldic-07.png",
+        "label": "Design 7"
+      },
+      {
+        "id": "heraldic-08",
+        "file": "assets/images/heraldic/heraldic-08.png",
+        "label": "Design 8"
+      },
+      {
+        "id": "heraldic-09",
+        "file": "assets/images/heraldic/heraldic-09.png",
+        "label": "Design 9"
+      }
+    ]
+  },
+  "embroidery": {
+    "title": "Embroidery",
+    "items": [
+      {
+        "id": "embroidery-01",
+        "file": "assets/images/embroidery/embroidery-01.png",
+        "label": "Design 1"
+      },
+      {
+        "id": "embroidery-02",
+        "file": "assets/images/embroidery/embroidery-02.png",
+        "label": "Design 2"
+      }
+    ]
+  }
+}

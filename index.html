@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T6100 Logo Rebrand — Feedback</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <h1>T6100 Logo Rebrand — Feedback</h1>
+  <p>Rate the directions below to help decide where the design goes next.</p>
+  <nav class="tabs">
+    <button class="active" data-target="view-survey">Survey</button>
+    <button data-target="view-results">Results</button>
+  </nav>
+</header>
+
+<main>
+  <section id="view-survey" class="view active">
+    <div class="comments-block" style="margin-bottom:24px; border-left: 4px solid var(--accent);">
+      <strong>Heads up:</strong> everything below is early-stage ideation — rough sketches exploring
+      directions, not final artwork, not final colors, not final anything. Nothing here is close to done.
+      We need your rankings to figure out which images and styles are worth pushing further, so rate
+      based on the <em>direction</em> you like, not the polish.
+    </div>
+
+    <div id="budget-bar" class="budget-bar"></div>
+
+    <div class="comments-block" id="category-ranking-block">
+      <label style="margin-bottom:2px;">Rank the three style directions</label>
+      <p class="hint" style="margin:0 0 14px;">1 = favorite direction overall, 3 = least favorite. Dragging one to a rank another already holds swaps them.</p>
+      <div id="category-ranking-rows"></div>
+    </div>
+
+    <div id="survey-sections"></div>
+
+    <div class="comments-block">
+      <label for="comments">Comments (optional)</label>
+      <textarea id="comments" placeholder="Anything you want to add — favorite elements, things to avoid, combos of styles, etc."></textarea>
+    </div>
+
+    <div class="submit-row">
+      <button id="submit-btn" class="primary">Submit ratings</button>
+      <span id="submit-status" class="status-msg"></span>
+    </div>
+  </section>
+
+  <section id="view-results" class="view">
+    <div id="results-gate" class="gate">
+      <h2>Results are password protected</h2>
+      <input type="password" id="results-password" placeholder="Password">
+      <button id="results-unlock" class="primary">Unlock</button>
+      <div id="results-pw-error" class="status-msg error"></div>
+    </div>
+
+    <div id="results-panel" style="display:none;">
+      <div class="results-toolbar">
+        <span id="results-status" class="status-msg"></span>
+        <button id="results-refresh">Refresh</button>
+      </div>
+      <h3>Style direction ranking (avg, lower = more favored)</h3>
+      <table class="results-table" id="category-rank-table">
+        <thead>
+          <tr><th>Direction</th><th>Avg rank</th><th># votes</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <h3>Per-image ratings</h3>
+      <table class="results-table" id="summary-table">
+        <thead>
+          <tr><th>Image</th><th>Design</th><th>Avg rating</th><th># ratings</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <h3>Comments</h3>
+      <div id="comments-list"></div>
+    </div>
+  </section>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script src="results.js"></script>
+</body>
+</html>
