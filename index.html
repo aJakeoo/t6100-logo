@@ -15,13 +15,22 @@
   <h1>T6100 Logo Rebrand - Feedback</h1>
   <p>Rate the directions below to help decide where the design goes next.</p>
   <nav class="tabs">
-    <button class="active" data-target="view-survey">Survey</button>
+    <button class="active" data-target="view-gallery">View</button>
+    <button data-target="view-survey">Survey</button>
     <button data-target="view-results">Results</button>
   </nav>
 </header>
 
 <main>
-  <section id="view-survey" class="view active">
+  <section id="view-gallery" class="view active">
+    <div class="comments-block" style="margin-bottom:24px; border-left: 4px solid var(--accent);">
+      Browse every design here first. Hover a thumbnail for a large preview, or click it for a
+      full-size view. Head to the Survey tab when you're ready to rate.
+    </div>
+    <div id="gallery-sections"></div>
+  </section>
+
+  <section id="view-survey" class="view">
     <div class="comments-block" style="margin-bottom:24px; border-left: 4px solid var(--accent);">
       <strong>Heads up:</strong> everything below is early-stage ideation - rough sketches exploring
       directions, not final artwork, not final colors, not type, not final anything. Nothing here is close to done.
@@ -119,5 +128,6 @@
 <script src="config.js"></script>
 <script src="app.js"></script>
 <script src="results.js"></script>
+<script src="gallery.js"></script>
 </body>
 </html>
