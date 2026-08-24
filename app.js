@@ -16,6 +16,21 @@
   const lightbox = document.getElementById("lightbox");
   const lightboxImg = document.getElementById("lightbox-img");
 
+  function setFill(input) {
+    const min = Number(input.min) || 0;
+    const max = Number(input.max) || 100;
+    const val = Number(input.value);
+    const pct = ((val - min) / (max - min)) * 100;
+    input.style.setProperty("--fill", pct + "%");
+  }
+
+  function pulse(input) {
+    input.classList.remove("just-set");
+    // force reflow so the animation restarts on repeated same-frame triggers
+    void input.offsetWidth;
+    input.classList.add("just-set");
+  }
+
   function updateBudgetBar() {
     const dots = [];
     for (let i = 0; i < MAX_FIVES; i++) {
@@ -46,6 +61,7 @@
         <span class="value rank-value">${categoryRanking[slug]}</span>
       </div>`;
     body.appendChild(rankCol);
+    setFill(rankCol.querySelector(".rank-slider"));
 
     const grid = document.createElement("div");
     grid.className = "grid";
@@ -65,8 +81,10 @@
             <input type="range" min="1" max="5" step="1" value="1" data-id="${item.id}">
             <span class="value">1</span>
           </div>
+          <div class="tick-row"><span></span><span></span><span></span><span></span><span></span></div>
         </div>`;
       grid.appendChild(card);
+      setFill(card.querySelector('input[type="range"]'));
     });
 
     body.appendChild(grid);
@@ -95,10 +113,13 @@
       const conflictValueEl = conflictInput.closest(".rank-slider-wrap").querySelector(".rank-value");
       conflictInput.value = String(oldVal);
       conflictValueEl.textContent = String(oldVal);
+      setFill(conflictInput);
     }
 
     categoryRanking[slug] = newVal;
     input.closest(".rank-slider-wrap").querySelector(".rank-value").textContent = String(newVal);
+    setFill(input);
+    pulse(input);
   }
 
   function attachSliderHandlers() {
@@ -129,6 +150,8 @@
     ratings[id] = val;
     valueEl.textContent = String(val);
     valueEl.classList.toggle("is-five", val === 5);
+    setFill(input);
+    pulse(input);
     updateBudgetBar();
   }
 

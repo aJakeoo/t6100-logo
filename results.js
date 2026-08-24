@@ -8,6 +8,9 @@
   const pwBtn = document.getElementById("results-unlock");
   const pwError = document.getElementById("results-pw-error");
   const refreshBtn = document.getElementById("results-refresh");
+  const purgeBtn = document.getElementById("results-purge");
+  const hoverPreview = document.getElementById("hover-preview");
+  const hoverPreviewImg = document.getElementById("hover-preview-img");
   const summaryTableBody = document.querySelector("#summary-table tbody");
   const categoryRankTableBody = document.querySelector("#category-rank-table tbody");
   const commentsList = document.getElementById("comments-list");
@@ -30,6 +33,42 @@
   pwBtn.addEventListener("click", tryUnlock);
   pwInput.addEventListener("keydown", (e) => { if (e.key === "Enter") tryUnlock(); });
   refreshBtn.addEventListener("click", loadResults);
+  purgeBtn.addEventListener("click", purgeResults);
+
+  function apiUrl(params) {
+    const url = new URL(CFG.APPS_SCRIPT_URL);
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+    if (CFG.RESULTS_ACCESS_TOKEN) url.searchParams.set("token", CFG.RESULTS_ACCESS_TOKEN);
+    return url.toString();
+  }
+
+  async function purgeResults() {
+    const sure = confirm(
+      "Delete ALL submitted ratings and comments? This cannot be undone."
+    );
+    if (!sure) return;
+    const reallySure = confirm(
+      "Really sure? Everyone's ratings will be permanently erased."
+    );
+    if (!reallySure) return;
+
+    purgeBtn.disabled = true;
+    resultsStatus.textContent = "Purging...";
+    try {
+      await fetch(CFG.APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ type: "purge", token: CFG.RESULTS_ACCESS_TOKEN })
+      });
+      // no-cors means we can't read the response; assume success and re-verify by reloading.
+      setTimeout(loadResults, 800);
+    } catch (err) {
+      resultsStatus.textContent = "Could not purge results.";
+    } finally {
+      purgeBtn.disabled = false;
+    }
+  }
 
   async function loadManifest() {
     if (manifest) return manifest;
@@ -61,8 +100,12 @@
     const lookup = labelLookup(m);
 
     try {
-      const r = await fetch(CFG.APPS_SCRIPT_URL + "?action=results", { method: "GET" });
+      const r = await fetch(apiUrl({ action: "results" }), { method: "GET" });
       const data = await r.json();
+      if (data.error) {
+        resultsStatus.textContent = "Access denied by backend — check RESULTS_ACCESS_TOKEN.";
+        return;
+      }
       const submissions = data.submissions || [];
       resultsStatus.textContent = `${submissions.length} submission(s).`;
 
@@ -142,4 +185,35 @@
     d.textContent = str;
     return d.innerHTML;
   }
+
+  function setupHoverPreview() {
+    summaryTableBody.addEventListener("mouseover", (e) => {
+      const img = e.target.closest(".results-thumb");
+      if (!img) return;
+      hoverPreviewImg.src = img.src;
+      hoverPreview.classList.add("active");
+    });
+    summaryTableBody.addEventListener("mousemove", (e) => {
+      if (!hoverPreview.classList.contains("active")) return;
+      positionHoverPreview(e.clientX, e.clientY);
+    });
+    summaryTableBody.addEventListener("mouseout", (e) => {
+      const img = e.target.closest(".results-thumb");
+      if (!img) return;
+      hoverPreview.classList.remove("active");
+    });
+  }
+
+  function positionHoverPreview(x, y) {
+    const margin = 24;
+    const previewSize = 320;
+    let left = x + margin;
+    let top = y + margin;
+    if (left + previewSize > window.innerWidth) left = x - margin - previewSize;
+    if (top + previewSize > window.innerHeight) top = window.innerHeight - previewSize - margin;
+    hoverPreview.style.left = `${Math.max(margin, left)}px`;
+    hoverPreview.style.top = `${Math.max(margin, top)}px`;
+  }
+
+  setupHoverPreview();
 })();
