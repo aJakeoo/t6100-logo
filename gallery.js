@@ -4,32 +4,65 @@
   const galleryRoot = document.getElementById("gallery-sections");
   const hoverPreview = document.getElementById("hover-preview");
   const hoverPreviewImg = document.getElementById("hover-preview-img");
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightbox-img");
 
-  function renderSection(section) {
+  const sections = {}; // slug -> { title, items, grid, selectedIds: [] (most recent first) }
+
+  function buildCard(item) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.dataset.id = item.id;
+    card.innerHTML = `
+      <div class="thumb" data-file="${item.file}">
+        <img src="${item.file}" alt="${item.label}" loading="lazy">
+      </div>
+      <div class="body">
+        <div class="label">${item.label}</div>
+      </div>`;
+    return card;
+  }
+
+  function renderGrid(slug) {
+    const state = sections[slug];
+    const byId = {};
+    state.items.forEach((item) => { byId[item.id] = item; });
+
+    const ordered = [
+      ...state.selectedIds.map((id) => byId[id]),
+      ...state.items.filter((item) => state.selectedIds.indexOf(item.id) === -1)
+    ];
+
+    state.grid.innerHTML = "";
+    ordered.forEach((item) => {
+      const card = buildCard(item);
+      if (state.selectedIds.indexOf(item.id) !== -1) card.classList.add("selected");
+      state.grid.appendChild(card);
+    });
+  }
+
+  function toggleSelect(slug, id) {
+    const state = sections[slug];
+    const idx = state.selectedIds.indexOf(id);
+    if (idx === -1) {
+      state.selectedIds.unshift(id);
+    } else {
+      state.selectedIds.splice(idx, 1);
+    }
+    renderGrid(slug);
+  }
+
+  function renderSection(slug, section) {
     const wrap = document.createElement("section");
     wrap.className = "rating-section";
+    wrap.dataset.slug = slug;
     wrap.innerHTML = `<h2>${section.title}</h2>`;
 
     const grid = document.createElement("div");
     grid.className = "grid";
-
-    section.items.forEach((item) => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <div class="thumb" data-file="${item.file}">
-          <img src="${item.file}" alt="${item.label}" loading="lazy">
-        </div>
-        <div class="body">
-          <div class="label">${item.label}</div>
-        </div>`;
-      grid.appendChild(card);
-    });
-
     wrap.appendChild(grid);
     galleryRoot.appendChild(wrap);
+
+    sections[slug] = { title: section.title, items: section.items, grid, selectedIds: [] };
+    renderGrid(slug);
   }
 
   function showPreview(file) {
@@ -71,10 +104,10 @@
     galleryRoot.addEventListener("click", (e) => {
       const thumb = e.target.closest(".thumb");
       if (!thumb) return;
-      lightboxImg.src = thumb.dataset.file;
-      lightbox.classList.add("active");
+      const card = thumb.closest(".card");
+      const wrap = thumb.closest(".rating-section");
+      toggleSelect(wrap.dataset.slug, card.dataset.id);
     });
-    lightbox.addEventListener("click", () => lightbox.classList.remove("active"));
   }
 
   function init() {
@@ -82,7 +115,7 @@
       .then((r) => r.json())
       .then((manifest) => {
         ["craft-label", "heraldic", "embroidery"].forEach((slug) => {
-          if (manifest[slug]) renderSection(manifest[slug]);
+          if (manifest[slug]) renderSection(slug, manifest[slug]);
         });
       });
     setupInteractions();
