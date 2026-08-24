@@ -443,6 +443,69 @@ input[type="range"]::-moz-range-progress {
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
+.shape-choice {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.shape-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 120px;
+  padding: 16px 10px;
+  background: var(--bg-alt);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease), transform 0.12s var(--ease), color 0.15s var(--ease);
+}
+
+.shape-option:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+.shape-option:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.shape-option.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.shape-icon {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid currentColor;
+  box-sizing: border-box;
+}
+
+.shape-icon-square {
+  border-radius: 4px;
+}
+
+.shape-icon-circle {
+  border-radius: 50%;
+}
+
+.shape-icon-pentagon {
+  border: none;
+  width: 42px;
+  height: 40px;
+  background: currentColor;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
 .submit-row {
   margin-top: 20px;
   display: flex;

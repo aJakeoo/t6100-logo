@@ -136,6 +136,16 @@
         "id": "embroidery-02",
         "file": "assets/images/embroidery/embroidery-02.png",
         "label": "Design 2"
+      },
+      {
+        "id": "embroidery-03",
+        "file": "assets/images/embroidery/embroidery-03.png",
+        "label": "Design 3"
+      },
+      {
+        "id": "embroidery-04",
+        "file": "assets/images/embroidery/embroidery-04.png",
+        "label": "Design 4"
       }
     ]
   }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T6100 Logo Rebrand — Feedback</title>
+<title>T6100 Logo Rebrand - Feedback</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
 <body>
 
 <header class="site-header">
-  <h1>T6100 Logo Rebrand — Feedback</h1>
+  <h1>T6100 Logo Rebrand - Feedback</h1>
   <p>Rate the directions below to help decide where the design goes next.</p>
   <nav class="tabs">
     <button class="active" data-target="view-survey">Survey</button>
@@ -23,7 +23,7 @@
 <main>
   <section id="view-survey" class="view active">
     <div class="comments-block" style="margin-bottom:24px; border-left: 4px solid var(--accent);">
-      <strong>Heads up:</strong> everything below is early-stage ideation — rough sketches exploring
+      <strong>Heads up:</strong> everything below is early-stage ideation - rough sketches exploring
       directions, not final artwork, not final colors, not type, not final anything. Nothing here is close to done.
       We need your rankings to figure out which images and styles are worth pushing further, so rate
       based on the <em>direction</em> you like, not the polish.
@@ -35,8 +35,26 @@
     <div id="survey-sections"></div>
 
     <div class="comments-block">
+      <label>What shape should the logo be in?</label>
+      <div class="shape-choice" id="shape-choice">
+        <button type="button" class="shape-option" data-shape="square">
+          <span class="shape-icon shape-icon-square" aria-hidden="true"></span>
+          Square
+        </button>
+        <button type="button" class="shape-option" data-shape="circle">
+          <span class="shape-icon shape-icon-circle" aria-hidden="true"></span>
+          Circle
+        </button>
+        <button type="button" class="shape-option" data-shape="pentagon">
+          <span class="shape-icon shape-icon-pentagon" aria-hidden="true"></span>
+          Pentagon
+        </button>
+      </div>
+    </div>
+
+    <div class="comments-block">
       <label for="comments">Comments (optional)</label>
-      <textarea id="comments" placeholder="Anything you want to add — favorite elements, things to avoid, combos of styles, etc."></textarea>
+      <textarea id="comments" placeholder="Anything you want to add - favorite elements, things to avoid, combos of styles, etc."></textarea>
     </div>
 
     <div class="submit-row">
@@ -61,6 +79,14 @@
           <button id="results-purge" class="danger">Purge all results</button>
         </div>
       </div>
+      <h3>Preferred logo shape</h3>
+      <table class="results-table" id="shape-table">
+        <thead>
+          <tr><th>Shape</th><th># votes</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
       <h3>Style direction ranking (avg, lower = more favored)</h3>
       <table class="results-table" id="category-rank-table">
         <thead>

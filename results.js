@@ -13,6 +13,7 @@
   const hoverPreviewImg = document.getElementById("hover-preview-img");
   const summaryTableBody = document.querySelector("#summary-table tbody");
   const categoryRankTableBody = document.querySelector("#category-rank-table tbody");
+  const shapeTableBody = document.querySelector("#shape-table tbody");
   const commentsList = document.getElementById("comments-list");
   const resultsStatus = document.getElementById("results-status");
 
@@ -88,10 +89,11 @@
     resultsStatus.textContent = "Loading...";
     summaryTableBody.innerHTML = "";
     categoryRankTableBody.innerHTML = "";
+    shapeTableBody.innerHTML = "";
     commentsList.innerHTML = "";
 
     if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL.indexOf("PASTE_YOUR") === 0) {
-      resultsStatus.textContent = "Backend not configured yet — see README.md.";
+      resultsStatus.textContent = "Backend not configured yet - see README.md.";
       return;
     }
 
@@ -121,6 +123,21 @@
         });
       });
 
+      const shapeCounts = {};
+      submissions.forEach((s) => {
+        if (!s.shape) return;
+        shapeCounts[s.shape] = (shapeCounts[s.shape] || 0) + 1;
+      });
+      const shapeLabels = { square: "Square", circle: "Circle", pentagon: "Pentagon" };
+      Object.entries(shapeLabels)
+        .sort((a, b) => (shapeCounts[b[0]] || 0) - (shapeCounts[a[0]] || 0))
+        .forEach(([key, label]) => {
+          const count = shapeCounts[key] || 0;
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${label}</td><td><span class="avg-badge">${count}</span></td>`;
+          shapeTableBody.appendChild(tr);
+        });
+
       Object.entries(m)
         .sort((a, b) => {
           const avgA = categoryTotals[a[0]] ? categoryTotals[a[0]].sum / categoryTotals[a[0]].count : 99;
@@ -129,7 +146,7 @@
         })
         .forEach(([slug, section]) => {
           const t = categoryTotals[slug];
-          const avg = t ? (t.sum / t.count).toFixed(2) : "—";
+          const avg = t ? (t.sum / t.count).toFixed(2) : "-";
           const count = t ? t.count : 0;
           const tr = document.createElement("tr");
           tr.innerHTML = `<td>${section.title}</td><td><span class="avg-badge">${avg}</span></td><td>${count}</td>`;
@@ -144,7 +161,7 @@
         })
         .forEach(([id, item]) => {
           const t = totals[id];
-          const avg = t ? (t.sum / t.count).toFixed(2) : "—";
+          const avg = t ? (t.sum / t.count).toFixed(2) : "-";
           const count = t ? t.count : 0;
           const tr = document.createElement("tr");
           tr.innerHTML = `

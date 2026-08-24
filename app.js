@@ -8,6 +8,7 @@
   const ratings = {}; // id -> value
   const fivesUsed = new Set();
   const categoryRanking = {}; // slug -> 1..3
+  let selectedShape = null;
 
   const surveyRoot = document.getElementById("survey-sections");
   const budgetBar = document.getElementById("budget-bar");
@@ -39,7 +40,7 @@
     budgetBar.innerHTML =
       `<span><strong>${fivesUsed.size} / ${MAX_FIVES}</strong> top ratings (5) used</span>` +
       `<span class="dots">${dots.join("")}</span>` +
-      `<span style="color:var(--ink-soft);font-size:0.85rem;">Give a 5 to your favorites only — you have ${MAX_FIVES} to hand out across the whole form.</span>`;
+      `<span style="color:var(--ink-soft);font-size:0.85rem;">Give a 5 to your favorites only - you have ${MAX_FIVES} to hand out across the whole form.</span>`;
   }
 
   function renderSection(slug, section) {
@@ -168,6 +169,17 @@
     }
   }
 
+  function setupShapeChoice() {
+    const wrap = document.getElementById("shape-choice");
+    wrap.addEventListener("click", (e) => {
+      const btn = e.target.closest(".shape-option");
+      if (!btn) return;
+      wrap.querySelectorAll(".shape-option").forEach((b) => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedShape = btn.dataset.shape;
+    });
+  }
+
   function setupLightbox() {
     surveyRoot.addEventListener("click", (e) => {
       const thumb = e.target.closest(".thumb");
@@ -186,11 +198,12 @@
       timestamp: new Date().toISOString(),
       ratings: ratings,
       categoryRanking: categoryRanking,
+      shape: selectedShape || "",
       comments: document.getElementById("comments").value.trim()
     };
 
     if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL.indexOf("PASTE_YOUR") === 0) {
-      flashStatus("Backend not configured yet — ask the site owner to finish setup (see README).", "error");
+      flashStatus("Backend not configured yet - ask the site owner to finish setup (see README).", "error");
       submitBtn.disabled = false;
       return;
     }
@@ -238,6 +251,7 @@
         updateBudgetBar();
       });
 
+    setupShapeChoice();
     setupLightbox();
     initTabs();
     submitBtn.addEventListener("click", submitForm);

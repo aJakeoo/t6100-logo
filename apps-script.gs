@@ -1,6 +1,10 @@
 // Paste this into script.google.com (Extensions > Apps Script, from a Google Sheet)
 // Sheet needs one tab named "Submissions" with header row:
-// timestamp | ratings_json | category_ranking_json | comments
+// timestamp | ratings_json | category_ranking_json | comments | shape
+//
+// (If you already have a live sheet from before the "shape" question was
+// added, just add a "shape" header in column E - existing rows are fine
+// as-is, they'll just read as no shape answer.)
 
 function doPost(e) {
   var body = JSON.parse(e.postData.contents);
@@ -19,7 +23,8 @@ function doPost(e) {
     body.timestamp || new Date().toISOString(),
     JSON.stringify(body.ratings || {}),
     JSON.stringify(body.categoryRanking || {}),
-    body.comments || ""
+    body.comments || "",
+    body.shape || ""
   ]);
   return ContentService.createTextOutput(JSON.stringify({ ok: true }))
     .setMimeType(ContentService.MimeType.JSON);
@@ -42,7 +47,8 @@ function doGet(e) {
         timestamp: row[0],
         ratings: ratings,
         categoryRanking: categoryRanking,
-        comments: row[3]
+        comments: row[3],
+        shape: row[4] || ""
       });
     }
     return ContentService.createTextOutput(JSON.stringify({ submissions: submissions }))
